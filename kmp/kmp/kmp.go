@@ -18,19 +18,20 @@ func New(pattern string) *KMP {
 func (k *KMP) buildFailureTable() {
 	m := len(k.pattern)
 	f := make([]int, m)
-	t := 0
+	t := -1
 	f[0] = -1
-	for s := 1; s < m; s++ {
-		if k.pattern[s] == k.pattern[t] {
-			f[s] = f[t]
-		} else {
-			f[s] = t
-			for t >= 0 && k.pattern[s] != k.pattern[t] {
-				t = f[t]
-			}
+	for s := 0; s < m-1; s++ {
+		for t >= 0 && k.pattern[s+1] != k.pattern[t+1] {
+			t = f[t]
 		}
-		t++
+		if k.pattern[s+1] == k.pattern[t+1] {
+			t = t + 1
+			f[s+1] = t
+		} else {
+			f[s+1] = -1
+		}
 	}
+	fmt.Println("t", t)
 	k.fail = f
 	fmt.Println(k.fail)
 }
