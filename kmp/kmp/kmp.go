@@ -1,7 +1,5 @@
 package kmp
 
-import "fmt"
-
 type KMP struct {
 	pattern string
 	fail    []int
@@ -31,29 +29,22 @@ func (k *KMP) buildFailureTable() {
 			f[s+1] = -1
 		}
 	}
-	fmt.Println("t", t)
 	k.fail = f
-	fmt.Println(k.fail)
 }
 
 func (k *KMP) Match(text string) int {
 	n := len(text)
 	m := len(k.pattern)
-	s := 0
-	i := 0
-	for i < n {
-		if k.pattern[s] == text[i] {
-			s++
-			i++
-			if s == m {
-				return i - m
-			}
-		} else {
+	s := -1
+	for i := 0; i < n; i++ {
+		for s > 0 && text[i] != k.pattern[s+1] {
 			s = k.fail[s]
-			if s < 0 {
-				i++
-				s++
-			}
+		}
+		if text[i] == k.pattern[s+1] {
+			s = s + 1
+		}
+		if s == m-1 {
+			return i - s
 		}
 	}
 	return -1
