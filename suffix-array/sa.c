@@ -50,14 +50,22 @@ void search_longest_duplicate(char* txt, int* sa, int* lcp, int m, int n) {
   for (int i = 1; i < n; i++) {
     if (lcp[i] > maxlen) maxlen = lcp[i];
   }
+  if (maxlen == 0) {
+    return ;
+  }
   printf("longest duplicate string:\n");
   for (int i = 1; i < n; i++) {
     if (lcp[i] == maxlen) {
-      int j = sa[i-1];
+      int j1 = sa[i-1];
+      int j2 = sa[i];
       int h = lcp[i];
-      printf("%.*s\n", h, txt+j); 
+      if (strncmp(txt+j1, txt+j2, h) == 0) {
+        printf("%.*s\n\n", h, txt+j1); 
+        printf("pos 1: %d, pos 2: %d, len: %d\n", j1, j2, h);
+      } 
     }
   }
+
 }
 
 int* kasai(char *txt, int sa[], int n) {
