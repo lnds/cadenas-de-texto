@@ -36,10 +36,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	n := 10
-	if len(files) < n {
-		n = len(files)
-	}
+	n := min(len(files), 10)
 	if searchFile != "" {
 		simil := ds.CalcSimils(searchFile)
 		top := getTop(simil, n)
@@ -62,7 +59,7 @@ func main() {
 func getTop(m map[string]float64, n int) []kv {
 	h := getHeap(m)
 	result := []kv{}
-	for i := 0; i < n; i++ {
+	for range n {
 		result = append(result, heap.Pop(h).(kv))
 	}
 	return result
